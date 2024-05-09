@@ -1,11 +1,11 @@
-package service
+package security
 
 import (
 	"crypto/sha1"
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/timurtm72/todo-app"
+	"github.com/timurtm72/todo-app/pkg/model"
 	"github.com/timurtm72/todo-app/pkg/repository"
 	"time"
 )
@@ -29,7 +29,7 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) CreateUser(user todo.User) (int, error) {
+func (s *AuthService) CreateUser(user model.User) (int, error) {
 	user.Password = generatePasswordHash(user.Password)
 	return s.repo.CreateUser(user)
 }

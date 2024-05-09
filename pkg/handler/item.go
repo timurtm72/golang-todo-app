@@ -2,13 +2,14 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/timurtm72/todo-app"
+	"github.com/timurtm72/todo-app/pkg/model"
+	"github.com/timurtm72/todo-app/pkg/security"
 	"net/http"
 	"strconv"
 )
 
 func (h *Handler) createItem(c *gin.Context) {
-	userId, err := getUserId(c)
+	userId, err := security.getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -20,7 +21,7 @@ func (h *Handler) createItem(c *gin.Context) {
 		return
 	}
 
-	var input todo.TodoItem
+	var input model.TodoItem
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -38,7 +39,7 @@ func (h *Handler) createItem(c *gin.Context) {
 }
 
 func (h *Handler) getAllItems(c *gin.Context) {
-	userId, err := getUserId(c)
+	userId, err := security.getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -60,7 +61,7 @@ func (h *Handler) getAllItems(c *gin.Context) {
 }
 
 func (h *Handler) getItemById(c *gin.Context) {
-	userId, err := getUserId(c)
+	userId, err := security.getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -82,7 +83,7 @@ func (h *Handler) getItemById(c *gin.Context) {
 }
 
 func (h *Handler) updateItem(c *gin.Context) {
-	userId, err := getUserId(c)
+	userId, err := security.getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -94,7 +95,7 @@ func (h *Handler) updateItem(c *gin.Context) {
 		return
 	}
 
-	var input todo.UpdateItemInput
+	var input model.UpdateItemInput
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -109,7 +110,7 @@ func (h *Handler) updateItem(c *gin.Context) {
 }
 
 func (h *Handler) deleteItem(c *gin.Context) {
-	userId, err := getUserId(c)
+	userId, err := security.getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

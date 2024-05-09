@@ -1,8 +1,9 @@
-package handler
+package security
 
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/timurtm72/todo-app/pkg/handler"
 	"net/http"
 	"strings"
 )
@@ -12,27 +13,27 @@ const (
 	userCtx             = "userId"
 )
 
-func (h *Handler) userIdentity(c *gin.Context) {
+func (h *handler.Handler) userIdentity(c *gin.Context) {
 	header := c.GetHeader(authorizationHeader)
 	if header == "" {
-		newErrorResponse(c, http.StatusUnauthorized, "empty auth header")
+		handler.newErrorResponse(c, http.StatusUnauthorized, "empty auth header")
 		return
 	}
 
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
-		newErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
+		handler.newErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
 		return
 	}
 
 	if len(headerParts[1]) == 0 {
-		newErrorResponse(c, http.StatusUnauthorized, "token is empty")
+		handler.newErrorResponse(c, http.StatusUnauthorized, "token is empty")
 		return
 	}
 
 	userId, err := h.services.Authorization.ParseToken(headerParts[1])
 	if err != nil {
-		newErrorResponse(c, http.StatusUnauthorized, err.Error())
+		handler.newErrorResponse(c, http.StatusUnauthorized, err.Error())
 		return
 	}
 

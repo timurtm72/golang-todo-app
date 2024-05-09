@@ -2,7 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/timurtm72/todo-app"
+	"github.com/timurtm72/todo-app/pkg/model"
+	"github.com/timurtm72/todo-app/pkg/security"
 	"net/http"
 	"strconv"
 )
@@ -21,13 +22,13 @@ import (
 // @Failure default {object} errorResponse
 // @Router /api/lists [post]
 func (h *Handler) createList(c *gin.Context) {
-	userId, err := getUserId(c)
+	userId, err := security.getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	var input todo.TodoList
+	var input model.TodoList
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -45,7 +46,7 @@ func (h *Handler) createList(c *gin.Context) {
 }
 
 type getAllListsResponse struct {
-	Data []todo.TodoList `json:"data"`
+	Data []model.TodoList `json:"data"`
 }
 
 // @Summary Get All Lists
@@ -61,7 +62,7 @@ type getAllListsResponse struct {
 // @Failure default {object} errorResponse
 // @Router /api/lists [get]
 func (h *Handler) getAllLists(c *gin.Context) {
-	userId, err := getUserId(c)
+	userId, err := security.getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -91,7 +92,7 @@ func (h *Handler) getAllLists(c *gin.Context) {
 // @Failure default {object} errorResponse
 // @Router /api/lists/:id [get]
 func (h *Handler) getListById(c *gin.Context) {
-	userId, err := getUserId(c)
+	userId, err := security.getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -113,7 +114,7 @@ func (h *Handler) getListById(c *gin.Context) {
 }
 
 func (h *Handler) updateList(c *gin.Context) {
-	userId, err := getUserId(c)
+	userId, err := security.getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -125,7 +126,7 @@ func (h *Handler) updateList(c *gin.Context) {
 		return
 	}
 
-	var input todo.UpdateListInput
+	var input model.UpdateListInput
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -140,7 +141,7 @@ func (h *Handler) updateList(c *gin.Context) {
 }
 
 func (h *Handler) deleteList(c *gin.Context) {
-	userId, err := getUserId(c)
+	userId, err := security.getUserId(c)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

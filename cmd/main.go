@@ -5,8 +5,8 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"github.com/timurtm72/todo-app"
 	"github.com/timurtm72/todo-app/pkg/handler"
+	"github.com/timurtm72/todo-app/pkg/model"
 	"github.com/timurtm72/todo-app/pkg/repository"
 	"github.com/timurtm72/todo-app/pkg/service"
 	"os"
@@ -34,7 +34,7 @@ func main() {
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
-	srv := new(todo.Server)
+	srv := new(model.todo)
 	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
 		logrus.Fatalf("error occured while running http server: %s", err.Error())
 	}
