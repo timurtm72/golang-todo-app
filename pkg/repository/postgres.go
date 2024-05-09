@@ -5,6 +5,14 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+const (
+	usersTable      = "users"
+	todoListsTable  = "todo_lists"
+	usersListsTable = "users_lists"
+	todoItemsTable  = "todo_items"
+	listsItemsTable = "lists_items"
+)
+
 type Config struct {
 	Host     string
 	Port     string
@@ -19,14 +27,12 @@ func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
 		cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode))
 	if err != nil {
 		return nil, err
-	} else {
-		fmt.Printf("Database: %s connection established\n", "postgres")
 	}
+
 	err = db.Ping()
 	if err != nil {
 		return nil, err
-	} else {
-		fmt.Printf("Database: %s connection pinged\n", "postgres")
 	}
+
 	return db, nil
 }
